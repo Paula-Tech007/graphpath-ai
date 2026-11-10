@@ -46,9 +46,9 @@
     </section>
     <div style="display:grid;gap:14px;align-content:start">
       <section class="panel"><h2>◫ Centralidade (GDS)</h2><div id="centrality" class="ranking">Aguardando dados…</div><small>Uma centralidade elevada não demonstra, sozinha, vulnerabilidade ou ataque.</small></section>
-      <section class="panel"><h2>◇ GraphRAG local</h2><p>Consulte o contexto indexado no Neo4j. Requer Ollama, embeddinggemma e índice previamente criado.</p>
+      <section class="panel"><h2>◇ GraphRAG local</h2><p>Perguntas sobre caminhos entre dois ativos usam Cypher diretamente. Outras perguntas utilizam GraphRAG com Ollama, embeddinggemma e Qwen.</p>
         <label for="question">Pergunta sobre o cenário</label><textarea id="question" maxlength="500" placeholder="Quais dependências existem até o banco crítico?"></textarea>
-        <button id="ask" style="margin-top:10px">Consultar Qwen</button><div class="result" id="answer" aria-live="polite">Respostas são hipóteses fundamentadas em dados fictícios.</div>
+        <button id="ask" style="margin-top:10px">Consultar evidências / IA</button><div class="result" id="answer" aria-live="polite">Respostas são hipóteses fundamentadas em dados fictícios.</div>
       </section>
       <section class="panel"><h2>☷ Transparência do laboratório</h2><p>Somente dados fictícios; nenhuma exploração ofensiva, credencial real ou inferência automática de risco.</p><a href="/docs" target="_blank" rel="noopener noreferrer">Explorar API (OpenAPI)</a></section>
     </div>
@@ -83,6 +83,6 @@ async function analyze(){const sc=$('scenario').value,s=$('source').value,t=$('t
 async function centrality(){try{let result=await api('/api/centrality?scenario='+$('scenario').value);$('centrality').replaceChildren();result.centrality.slice(0,15).forEach(n=>{let row=document.createElement('div');let name=document.createElement('span');name.textContent=n.id;let score=document.createElement('strong');score.textContent=Number(n.score).toFixed(1);row.append(name,score);$('centrality').append(row);});}catch(e){$('centrality').textContent='Indisponível: '+e.message;}}
 $('scenario').onchange=load;$('search').onclick=analyze;
 $('ask').onclick=async()=>{const q=$('question').value;if(q.trim().length<5){$('answer').textContent='Digite uma pergunta com pelo menos 5 caracteres.';return;}
- $('ask').disabled=true;$('answer').textContent='Consultando evidências e Qwen local…';try{const data=await api('/api/graphrag/ask',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({scenario:$('scenario').value,question:q})});$('answer').textContent=data.answer+'\n\nFontes: '+data.sources.map(s=>s.id+` (${s.score})`).join(', ');}catch(e){$('answer').textContent='Erro: '+e.message;}finally{$('ask').disabled=false;}};
+ $('ask').disabled=true;$('answer').textContent='Consultando evidências e Qwen local…';try{const data=await api('/api/graphrag/ask',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({scenario:$('scenario').value,question:q})});$('answer').textContent=(data.method==='cypher'?'[ROTAS VERIFICADAS VIA CYPHER]':data.method==='validation'?'[VERIFICACAO DO CENARIO]':'[INTERPRETACAO COM GRAPHRAG / QWEN]')+'\n\n'+data.answer+'\n\nFontes: '+(data.sources.length?data.sources.map(s=>s.id+(typeof s.score==='number'?` (${s.score})`:'' )).join(', '):'nenhuma');}catch(e){$('answer').textContent='Erro: '+e.message;}finally{$('ask').disabled=false;}};
 load();
 </script></body></html>

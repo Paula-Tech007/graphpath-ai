@@ -1,223 +1,253 @@
-# GraphPath AI
+<div align="center">
 
-### Graph-Based Cybersecurity Analysis with Local Generative AI
+<img src="assets/graphpath-matrix.png" alt="GraphPath AI — Matrix Security Lab" width="100%" />
 
-Projeto de análise de conectividade, caminhos de acesso e
-centralidade em infraestruturas simuladas, combinando
-Neo4j, Graph Data Science, Python e inteligência artificial local.
+<br />
 
-## Objetivo
+**GRAPH INTELLIGENCE · CYBERSECURITY ANALYTICS · LOCAL GENERATIVE AI**
 
-Demonstrar como bancos de dados de grafos e algoritmos
-de análise estrutural podem apoiar investigações de segurança
-cibernética e a interpretação de relações entre ativos.
+<img alt="Status: MVP validado" src="https://img.shields.io/badge/STATUS-MVP%20VALIDADO-00db77?style=for-the-badge&labelColor=07130b" />
+<img alt="Testes: 6 aprovados" src="https://img.shields.io/badge/TESTES-6%2F6%20OK-00db77?style=for-the-badge&labelColor=07130b" />
+<img alt="Neo4j: 2026.10.2" src="https://img.shields.io/badge/NEO4J-2026.10.2-00bfa5?style=for-the-badge&labelColor=07130b" />
+<img alt="Python" src="https://img.shields.io/badge/PYTHON-3.12-00bfa5?style=for-the-badge&labelColor=07130b" />
 
-O projeto utiliza exclusivamente dados fictícios.
+**[Visão geral](#visao-geral) · [Arquitetura](#arquitetura) · [Resultados](#resultados) · [Executar](#executar) · [Roadmap](#roadmap)**
 
-## Arquitetura
+</div>
 
-Entrada: infraestrutura simulada
-        |
-        v
-Neo4j - Nós e relacionamentos
-        |
-        v
-Cypher - Consultas de caminhos
-        |
-        v
-Graph Data Science - Centralidade
-        |
-        v
-Python - Extração de evidências
-        |
-        v
-Ollama / Qwen3:4B - IA Generativa
-        |
-        v
-Relatórios técnicos
+---
 
-## Tecnologias
+<a id="visao-geral"></a>
 
-- Python 3
-- Neo4j 2026.10.2
-- Neo4j Graph Data Science
-- Cypher
-- Docker e Docker Compose
-- Ollama
-- Qwen3:4B-Instruct
-- unittest
+## `>_` Visão geral
 
-## Funcionalidades implementadas
+O **GraphPath AI** é um laboratório de **análise de conectividade e dependências de segurança baseado em grafos**. Ele combina a modelagem de ativos no **Neo4j**, consultas **Cypher**, algoritmos de **Graph Data Science (GDS)** e interpretação de evidências com **IA generativa local (Ollama + Qwen)**.
 
-- Modelagem de identidades e ativos em grafos.
-- Consultas de caminhos por Cypher.
-- Cálculo de Betweenness Centrality.
-- Simulação não destrutiva de remoção de nós.
-- Extração automatizada de evidências.
-- Geração de texto com inteligência artificial local.
-- Consolidação de relatório técnico.
-- Testes automatizados de consistência.
+> [!IMPORTANT]
+> **Cenário 100% fictício.** As rotas representam **possibilidades de conectividade modeladas**, e não ataques confirmados. Uma pontuação de centralidade elevada, isoladamente, **não comprova vulnerabilidade ou risco**.
 
-## Resultados do laboratório
+### O que este MVP demonstra
 
-Cenário inicial:
+| Módulo | Capacidade implementada | Situação |
+| :--- | :--- | :---: |
+| `01 / GRAPH` | Modelagem de identidades, ativos e relacionamentos | ✅ |
+| `02 / CYPHER` | Descoberta de caminhos até um ativo crítico simulado | ✅ |
+| `03 / GDS` | **Betweenness Centrality** por nó | ✅ |
+| `04 / IMPACT` | Simulação não destrutiva da ausência de um nó | ✅ |
+| `05 / AI` | Relatório inicial interpretado pelo Qwen local | ✅ |
+| `06 / QA` | Coleta reproduzível e **6 testes de consistência** | ✅ |
 
-- 6 nós
-- 5 relacionamentos
-- 2 caminhos entre GP-EXT e GP-DB
-- GP-WEB com centralidade 3.0
-- GP-APP e GP-JUMP com centralidade 1.0
-- 0 caminhos restantes ao excluir GP-WEB da análise
+<a id="arquitetura"></a>
 
-O GP-WEB foi identificado como ponto obrigatório de passagem
-entre a identidade externa e o banco crítico simulado.
+## `>_` Arquitetura
 
-Centralidade elevada não comprova vulnerabilidade.
+```mermaid
+flowchart TD
+    A["Cenário fictício<br/>Identidades e ativos"] --> B["Neo4j<br/>Nós + relações"]
+    B --> C["Cypher<br/>Caminhos e dependências"]
+    B --> D["Graph Data Science<br/>Betweenness Centrality"]
+    C --> E["Python / Shell<br/>Coleta de evidências"]
+    D --> E
+    E --> F["Relatório técnico<br/>Baseado em evidências"]
+    E -. "Integração local opcional" .-> G["Ollama + Qwen3:4B<br/>Interpretação por IA"]
+    G -.-> H["Relatório inicial de IA<br/>Revisão humana necessária"]
 
-## Testes
+    classDef source fill:#07150c,stroke:#00e676,color:#d8ffe6,stroke-width:2px;
+    classDef analysis fill:#102319,stroke:#00c896,color:#d8ffe6,stroke-width:2px;
+    classDef output fill:#0b1b14,stroke:#70ff9c,color:#ffffff,stroke-width:2px;
+    class A,B source;
+    class C,D,E analysis;
+    class F,G,H output;
+```
 
-Os seis testes de consistência foram aprovados:
+### Tecnologias
 
-    python3 -m unittest discover -s tests -v
+`Python` · `Neo4j` · `Cypher` · `Graph Data Science` · `Docker Compose` · `Bash` · `Ollama` · `Qwen3:4B-Instruct` · `unittest`
 
-Os testes atuais utilizam evidências salvas.
-Testes completos de integração ainda serão desenvolvidos.
+A análise de grafos funciona sem executar a IA. A geração com Qwen foi validada em **Windows + WSL2** e segue como módulo opcional, dependente de uma instalação local do Ollama.
 
-## Arquivos principais
+<a id="resultados"></a>
 
-- compose.yaml: infraestrutura Neo4j
-- seed.cypher: criação do cenário fictício
-- gds.cypher: projeção e análise de centralidade
-- impacto.cypher: simulação de impacto
-- integrar_ia.py: primeira integração com IA
-- gerar_relatorio_limitado.py: geração limitada com Ollama
-- consolidar_relatorio.py: consolidação técnica
-- evidencias.txt: resultados do cenário fictício
-- relatorio_tecnico.md: relatório consolidado
-- tests/: testes automatizados
+## `>_` Resultados do laboratório
 
-## Segurança
+O cenário inicial possui **6 nós** e **5 relacionamentos**. Uma identidade externa (`GP-EXT`) dispõe de dois caminhos modelados até o banco de dados (`GP-DB`):
 
-O projeto não deve armazenar credenciais no GitHub.
+```mermaid
+flowchart LR
+    EXT["GP-EXT<br/>Identidade externa"] -->|HAS_ACCESS| WEB["GP-WEB"]
+    WEB -->|CAN_REACH| APP["GP-APP"]
+    WEB -->|CAN_REACH| JUMP["GP-JUMP"]
+    APP -->|CAN_REACH| DB["GP-DB<br/>Banco crítico simulado"]
+    JUMP -->|CAN_REACH| DB
+    RH["GP-RH<br/>Isolado"]
 
-O arquivo .env é excluído pelo .gitignore.
+    classDef entry fill:#09170d,stroke:#00e676,color:#ceffdc,stroke-width:2px;
+    classDef transit fill:#102219,stroke:#54ff85,color:#effff4,stroke-width:2px;
+    classDef critical fill:#13351b,stroke:#90ff6d,color:#ffffff,stroke-width:2px;
+    class EXT,RH entry;
+    class WEB,APP,JUMP transit;
+    class DB critical;
+```
 
-Todos os exemplos devem utilizar informações fictícias,
-sem dados reais de clientes ou organizações.
+**Rotas obtidas por Cypher:**
 
-## Limitações atuais
+```text
+[1] GP-EXT → GP-WEB → GP-APP  → GP-DB
+[2] GP-EXT → GP-WEB → GP-JUMP → GP-DB
+```
 
-- Cenário inicial de pequena escala.
-- Testes baseados em resultados previamente coletados.
-- Integração Ollama dependente de Windows e WSL.
-- Scripts com caminhos locais que serão refatorados.
-- Projeção GDS armazenada em memória.
-- Relatórios de IA sujeitos a validação técnica.
+### Centralidade estrutural (GDS)
 
-## Próximas melhorias
+| Ativo | Betweenness Centrality |
+| :--- | ---: |
+| **GP-WEB** | **3.0** |
+| GP-APP | 1.0 |
+| GP-JUMP | 1.0 |
+| GP-DB | 0.0 |
+| GP-EXT | 0.0 |
+| GP-RH | 0.0 |
 
-- Refatorar configuração e caminhos locais.
-- Criar testes de integração.
-- Expandir o grafo para cenários mais complexos.
-- Implementar embeddings e busca semântica.
-- Desenvolver uma API de análise.
-- Criar visualização interativa dos grafos.
+### Simulação de dependência
 
-## Status
+```text
+$ ANÁLISE DE CAMINHOS
+  Caminhos identificados ................. 2
+  Caminhos excluindo GP-WEB .............. 0
+  Alterações no banco .................... nenhuma
+  Interpretação .......................... ponto de passagem obrigatório
+```
 
-MVP em desenvolvimento.
+**Leitura técnica:** no grafo construído, `GP-WEB` pertence aos dois caminhos observados entre `GP-EXT` e `GP-DB`. O teste desconsidera esse nó **somente na consulta**, sem removê-lo do Neo4j. Esses resultados não demonstram comprometimento, indisponibilidade real ou possibilidade de exploração.
 
-Infraestrutura, consultas, algoritmo GDS,
-geração local com IA e testes iniciais validados.
+<a id="executar"></a>
 
-## Licença
+## `>_` Execução local
 
-A definir antes da publicação pública.
+### Pré-requisitos
 
-## Como executar o laboratorio
+- Docker e Docker Compose acessíveis no terminal Linux/WSL2;
+- Python **3.10+**;
+- Git;
+- Ollama e `qwen3:4b-instruct` **somente se desejar testar a IA**.
 
-### Pre-requisitos
-
-- Docker Desktop com Docker Compose
-- Linux ou WSL2 com Docker acessivel
-- Python 3.10 ou superior
-- Git
-
-### 1. Preparar o ambiente
-
-No diretorio raiz do projeto:
+**1. Clonar e configurar**
 
 ```bash
+git clone https://github.com/Paula-Tech007/graphpath-ai.git
+cd graphpath-ai
 cp .env.example .env
 ```
 
-Edite o arquivo `.env` e defina uma senha forte
-para NEO4J_PASSWORD.
+Edite `.env` e substitua o valor de `NEO4J_PASSWORD` por uma senha forte **antes da primeira inicialização**. O arquivo `.env` é ignorado pelo Git.
 
-Nao publique esse arquivo nem compartilhe sua senha.
-
-### 2. Iniciar o laboratorio
+**2. Preparar o laboratório**
 
 ```bash
 ./scripts/preparar_laboratorio.sh
 ```
 
-O script inicia o Neo4j, aguarda sua disponibilidade,
-carrega os dados ficticios e prepara a projecao GDS.
+O script inicia o Neo4j, aguarda o banco ficar disponível, carrega os dados fictícios e prepara a projeção GDS. A projeção fica em memória e pode precisar ser recriada após reinícios.
 
-### 3. Coletar evidencias
+**3. Coletar evidências e gerar o relatório técnico**
 
 ```bash
 ./scripts/coletar_evidencias.sh
 ```
 
-O comando executa consultas ao banco,
-calcula a centralidade, simula o impacto
-e produz um relatorio tecnico.
+Esse comando atualiza `evidencias.txt`, gera `relatorio_tecnico.md` e executa os testes de consistência.
 
-### 4. Validar a integracao
+**4. Verificar a integração**
 
 ```bash
 ./scripts/verificar_integracao.sh
-```
-
-### 5. Executar os testes
-
-```bash
 python3 -m unittest discover -s tests -v
 ```
 
-### Interface Neo4j
+<details>
+<summary><strong>Exemplo do resultado esperado dos testes</strong></summary>
 
-A interface local fica disponivel em:
+```text
+Ran 6 tests
 
-http://localhost:7474
+OK
+```
 
-Usuario: neo4j
+Esses testes conferem as evidências salvas do cenário inicial. Não são uma suíte completa de testes ponta a ponta.
 
-Senha: definida no arquivo .env durante a
-primeira inicializacao do banco.
+</details>
 
-### Inteligencia artificial local
+### Acesso ao Neo4j Browser
 
-A integracao de IA foi validada com Ollama
-e Qwen3:4B-Instruct no Windows, via WSL2.
+- URL local: **http://localhost:7474**
+- Usuário: `neo4j`
+- Senha: a definida em `.env` na primeira inicialização.
 
-O modelo precisa estar instalado e acessivel.
-Os scripts atuais dessa integracao dependem
-do PowerShell do Windows.
+> [!CAUTION]
+> Alterar `.env` depois que o volume do Neo4j já foi inicializado **não modifica automaticamente** a senha armazenada no banco. Não publique `.env`, tokens ou dados de ambientes reais.
 
-A geracao com IA e opcional para executar
-as analises de grafos e os testes principais.
+## `>_` Inteligência artificial local
 
-### Observacoes
+O projeto inclui uma experiência de geração de relatório com **Ollama + Qwen3:4B-Instruct**. O modelo recebeu as evidências coletadas e produziu uma interpretação inicial em português.
 
-O projeto utiliza dados totalmente ficticios.
+- `integrar_ia.py`: primeira integração experimental;
+- `gerar_relatorio_limitado.py`: versão com limite de geração e tempo máximo;
+- `consolidar_relatorio.py`: consolidação técnica **determinística**, sem depender do modelo generativo.
 
-As analises demonstram conectividade estrutural,
-nao exploracao real de vulnerabilidades.
+**Limitação atual:** os scripts de IA usam o PowerShell do Windows a partir do WSL2. A integração com IA não é necessária para executar os testes principais. Saídas geradas por LLM devem passar por revisão técnica e **não devem ser tratadas como evidência adicional**.
 
-A senha definida na primeira inicializacao
-do Neo4j permanece associada ao volume de dados.
-Alterar o .env posteriormente nao altera
-automaticamente a senha existente.
+## `>_` Estrutura do repositório
+
+```text
+graphpath-ai/
+├── assets/
+│   └── graphpath-matrix.png       # Banner oficial (imagem original)
+├── scripts/
+│   ├── preparar_laboratorio.sh    # Inicialização Neo4j + GDS
+│   ├── coletar_evidencias.sh      # Coleta, relatório e testes
+│   └── verificar_integracao.sh   # Verificações de funcionamento
+├── tests/
+│   └── test_graphpath.py         # 6 testes de consistência
+├── compose.yaml                  # Neo4j em Docker
+├── seed.cypher                   # Grafo fictício
+├── gds.cypher                    # Projeção e centralidade
+├── impacto.cypher                # Simulação não destrutiva
+├── integrar_ia.py                # Integração experimental com IA
+├── gerar_relatorio_limitado.py   # Geração limitada via Ollama
+├── consolidar_relatorio.py      # Relatório técnico consolidado
+├── evidencias.txt                # Saída de referência
+├── relatorio_tecnico.md          # Relatório verificável
+├── .env.example                  # Modelo sem credenciais
+└── README.md
+```
+
+<a id="roadmap"></a>
+
+## `>_` Roadmap
+
+- [x] Modelagem de ativos e caminhos com Neo4j/Cypher
+- [x] Centralidade com GDS e simulação de impacto
+- [x] Integração experimental com IA local
+- [x] Relatório baseado em evidências e 6 testes
+- [ ] Testes de integração de ponta a ponta
+- [ ] Integração Ollama portável entre sistemas
+- [ ] Embeddings e busca semântica (GraphRAG)
+- [ ] API Python e interface interativa de grafos
+- [ ] Cenários ampliados com dados fictícios
+
+## `>_` Escopo e responsabilidade
+
+Este é um **projeto de estudo e portfólio**, executado sobre ativos simulados. Não coleta dados de clientes, não realiza exploração ofensiva e não atribui automaticamente risco a ativos com alta centralidade. As recomendações derivadas dos resultados são hipóteses para avaliação, não constatações de falhas reais.
+
+**Licença:** ainda não definida. Até que uma licença seja adicionada, o repositório público não concede automaticamente permissões amplas de reutilização.
+
+---
+
+<div align="center">
+
+**`[ GRAPH ANALYSIS COMPLETE ]`**
+
+<sub>Desenvolvido para demonstrar análise de segurança com grafos, automação e IA local.</sub>
+
+<sub>Projeto por <a href="https://github.com/Paula-Tech007">Paula-Tech007</a> · MVP em evolução contínua</sub>
+
+</div>

@@ -228,11 +228,20 @@ graphpath-ai/
 - [x] Centralidade com GDS e simulação de impacto
 - [x] Integração experimental com IA local
 - [x] Relatório baseado em evidências e 6 testes
-- [ ] Testes de integração de ponta a ponta
-- [ ] Integração Ollama portável entre sistemas
-- [ ] Embeddings e busca semântica (GraphRAG)
-- [ ] API Python e interface interativa de grafos
-- [ ] Cenários ampliados com dados fictícios
+- [x] Testes de integração de ponta a ponta
+- [x] Integração Ollama portável entre sistemas
+- [x] Embeddings e busca semântica (GraphRAG)
+- [x] API Python e interface interativa de grafos
+- [x] Cenários ampliados com dados fictícios
+
+
+## `>_` Evolução v0.2 — API, GraphRAG e grafo ampliado
+
+A versão 0.2 acrescenta cenário fictício com **32 nós e 60 relações**, API local em FastAPI, painel interativo Matrix e GraphRAG usando **embeddinggemma + Qwen** no Ollama. O cenário original **6 nós / 5 relações** continua isolado e validado.
+
+**[Instruções, limites de segurança e validação da v0.2](docs/EVOLUCAO_V2.md)**
+
+> O GraphRAG realiza recuperação semântica sobre evidências modeladas, não identifica vulnerabilidades reais automaticamente.
 
 ## `>_` Escopo e responsabilidade
 

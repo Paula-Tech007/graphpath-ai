@@ -1,0 +1,6 @@
+# Instalar em um venv: python3 -m pip install -r requirements-v2.txt
+neo4j>=5.26,<7
+fastapi>=0.115,<1
+uvicorn>=0.30,<1
+httpx>=0.27,<1
+python-dotenv>=1.0,<2

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GraphPath AI · Matrix Security Lab</title>
+  <style>
+    :root{color-scheme:dark;font-family:system-ui,'Segoe UI',sans-serif;--green:#43ff8a;--line:#27523f;--surface:#0c1913;--muted:#a6c4b1}
+    *{box-sizing:border-box}body{margin:0;color:#e5ffec;background:radial-gradient(ellipse at 40% -15%,#125b2c 0,transparent 55%),#050b08}
+    a{color:var(--green)}main{max-width:1300px;margin:auto;padding:18px}
+    .banner{width:100%;display:block;max-height:340px;object-fit:cover;border:1px solid #235637;border-radius:12px}
+    header .sub{letter-spacing:.09em;color:var(--green);font-size:12px;margin:12px 2px}
+    .badges{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.badge{color:#7fffc0;border:1px solid #19663f;border-radius:999px;padding:5px 11px;background:#092519;font-size:12px}
+    .layout{display:grid;grid-template-columns:1.65fr 1fr;gap:14px}.panel{background:linear-gradient(135deg,#0c1e16,#07100d);border:1px solid #255b3e;border-radius:12px;padding:16px;box-shadow:0 0 30px #00e6760a}
+    h1{font-size:clamp(25px,3vw,38px);margin:0}h2{font-size:18px;color:#b9ffcf;margin:0 0 12px}h3{font-size:15px;color:#a2ffbf}
+    p,li{line-height:1.55}p,.muted{color:var(--muted)}small{color:var(--muted)}label{color:#c1ffce;font-weight:600;font-size:13px}
+    select,input,textarea{width:100%;padding:10px;border:1px solid #276743;border-radius:8px;background:#081810;color:#e5ffec;font:inherit}textarea{min-height:78px}
+    button{font-weight:700;padding:10px 13px;color:#05150c;background:#43ff8a;border:0;border-radius:8px;cursor:pointer}button:hover{background:#9fffc1}button:disabled{opacity:.5}
+    .controls{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end;margin:12px 0}
+    .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}.metric{text-align:center;padding:12px;border:1px solid #255b3e;border-radius:9px;background:#08170e}.metric strong{display:block;color:var(--green);font-size:25px}
+    svg{width:100%;height:auto;min-height:360px;background:linear-gradient(#143d1a26 1px,transparent 1px),linear-gradient(90deg,#143d1a26 1px,transparent 1px),#07120b;background-size:28px 28px;border:1px solid #214f31;border-radius:9px}
+    .node circle{fill:#143b25;stroke:#65f99a;stroke-width:2;cursor:grab}.node.active circle{fill:#007c3d;stroke:#d1ff78;stroke-width:3}.node text{fill:white;font-size:11px;pointer-events:none}.link{stroke:#3b9360;stroke-width:1.5;opacity:.65}.link.active{stroke:#daff61;stroke-width:3;opacity:1}
+    .result{margin-top:12px;color:#b6ffcf;white-space:pre-wrap;overflow-wrap:anywhere;font-family:ui-monospace,Consolas,monospace;font-size:13px;max-height:320px;overflow:auto}
+    .ranking{max-height:250px;overflow:auto}.ranking>div{display:flex;justify-content:space-between;border-bottom:1px solid #183c2a;padding:7px}.status{margin-bottom:10px;font-size:13px;color:var(--muted)}
+    footer{text-align:center;padding:30px;color:#83ad97;font-size:13px}@media(max-width:850px){.layout{grid-template-columns:1fr}.controls{grid-template-columns:1fr 1fr}.metrics{grid-template-columns:1fr 1fr 1fr}}@media(max-width:560px){.controls{grid-template-columns:1fr}.metrics{grid-template-columns:1fr}}
+  </style>
+</head>
+<body><main>
+  <header><img class="banner" src="/assets/graphpath-matrix.png" alt="GraphPath AI Matrix Security Lab — banner oficial"/>
+    <div class="sub">>_ CYBERSECURITY ANALYTICS / GRAPH INTELLIGENCE / LOCAL AI</div>
+    <div class="badges"><span class="badge">NEO4J + GDS</span><span class="badge">CYPHER</span><span class="badge">PYTHON</span><span class="badge">QWEN + OLLAMA</span><span class="badge">CENÁRIO FICTÍCIO</span></div>
+  </header>
+  <div class="status" id="status">Conectando ao laboratório local…</div>
+  <section class="metrics"><div class="metric"><strong id="nodes">—</strong><small>Nós</small></div><div class="metric"><strong id="edges">—</strong><small>Relações</small></div><div class="metric"><strong id="routes">—</strong><small>Caminhos selecionados</small></div></section>
+  <div class="layout">
+    <section class="panel"><h2>◉ Grafo interativo</h2>
+      <div class="controls">
+        <div><label for="scenario">Cenário</label><select id="scenario"><option value="base">MVP original</option><option value="expanded">Expandido (32 nós)</option></select></div>
+        <div><label for="source">Origem</label><select id="source"></select></div>
+        <div><label for="target">Destino</label><select id="target"></select></div>
+        <button id="search">Analisar</button>
+      </div>
+      <svg id="graph" viewBox="0 0 780 450" role="img" aria-label="Visualização interativa do grafo. Arraste os nós para reorganizar"></svg>
+      <small>Arraste os nós para reorganizar. As linhas amarelas destacam a primeira rota encontrada. Clique num nó para ver seu identificador.</small>
+      <div class="result" id="path-result">Selecione uma origem e um destino para visualizar os caminhos.</div>
+    </section>
+    <div style="display:grid;gap:14px;align-content:start">
+      <section class="panel"><h2>◫ Centralidade (GDS)</h2><div id="centrality" class="ranking">Aguardando dados…</div><small>Uma centralidade elevada não demonstra, sozinha, vulnerabilidade ou ataque.</small></section>
+      <section class="panel"><h2>◇ GraphRAG local</h2><p>Consulte o contexto indexado no Neo4j. Requer Ollama, embeddinggemma e índice previamente criado.</p>
+        <label for="question">Pergunta sobre o cenário</label><textarea id="question" maxlength="500" placeholder="Quais dependências existem até o banco crítico?"></textarea>
+        <button id="ask" style="margin-top:10px">Consultar Qwen</button><div class="result" id="answer" aria-live="polite">Respostas são hipóteses fundamentadas em dados fictícios.</div>
+      </section>
+      <section class="panel"><h2>☷ Transparência do laboratório</h2><p>Somente dados fictícios; nenhuma exploração ofensiva, credencial real ou inferência automática de risco.</p><a href="/docs" target="_blank" rel="noopener noreferrer">Explorar API (OpenAPI)</a></section>
+    </div>
+  </div>
+  <footer>GraphPath AI v0.2 — Matrix Security Lab · <a href="https://github.com/Paula-Tech007/graphpath-ai">GitHub Paula-Tech007</a></footer>
+</main><script>
+'use strict';
+const $ = id => document.getElementById(id);
+let graphData={nodes:[],edges:[]},highlightNodes=new Set(),highlightEdges=new Set(),currentPositions={},dragged=null;
+const scenarioDefaults={base:['GP-EXT','GP-DB'],expanded:['LAB-ID-01','LAB-DB-01']};
+async function api(path,opts){const resp=await fetch(path,opts);const data=await resp.json();if(!resp.ok)throw new Error(data.detail||`HTTP ${resp.status}`);return data;}
+const ns='http://www.w3.org/2000/svg';function el(type,attrs){let x=document.createElementNS(ns,type);Object.entries(attrs||{}).forEach(([k,v])=>x.setAttribute(k,String(v)));return x;}
+function render(){const svg=$('graph');svg.replaceChildren();const nodes=graphData.nodes,edges=graphData.edges;if(!nodes.length)return;
+  const origin={x:390,y:225},radius=180;const positions=currentPositions;
+  nodes.forEach((n,i)=>{if(!positions[n.id]){const a=2*Math.PI*i/nodes.length;positions[n.id]={x:origin.x+radius*Math.cos(a),y:origin.y+radius*Math.sin(a)};}});
+  edges.forEach(e=>{let a=positions[e.source],b=positions[e.target];if(!a||!b)return;const active=highlightEdges.has(`${e.source}:${e.target}`);const line=el('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,class:`link${active?' active':''}`});svg.append(line);});
+  nodes.forEach(n=>{let p=positions[n.id],g=el('g',{class:`node${highlightNodes.has(n.id)?' active':''}`,transform:`translate(${p.x} ${p.y})`});g.append(el('circle',{r:18}));const t=el('text',{'text-anchor':'middle',y:36});t.textContent=n.id;g.append(t);g.style.cursor='grab';const title=el('title');title.textContent=`${n.id} — ${n.description||n.kind}`;g.append(title);
+    g.addEventListener('pointerdown',ev=>{ev.preventDefault();dragged=n.id;svg.setPointerCapture(ev.pointerId);});svg.append(g);});}
+$('graph').addEventListener('pointermove',ev=>{if(!dragged)return;const svg=$('graph');const pt=svg.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;const m=svg.getScreenCTM();if(!m)return;const p=pt.matrixTransform(m.inverse());currentPositions[dragged]={x:Math.max(30,Math.min(750,p.x)),y:Math.max(30,Math.min(418,p.y))};render();});
+$('graph').addEventListener('pointerup',()=>{dragged=null;});
+$('graph').addEventListener('pointercancel',()=>{dragged=null;});
+function fillOptions(){const ids=graphData.nodes.map(n=>n.id);for(const key of ['source','target']){$(key).replaceChildren();ids.forEach(id=>{const op=document.createElement('option');op.value=id;op.textContent=id;$(key).append(op);});}
+ const [src,dst]=scenarioDefaults[$('scenario').value];$('source').value=ids.includes(src)?src:ids[0];$('target').value=ids.includes(dst)?dst:ids[ids.length-1];}
+async function load(){const sc=$('scenario').value;$('status').textContent='Carregando '+sc+'…';highlightNodes=new Set();highlightEdges=new Set();currentPositions={};
+ try{graphData=await api('/api/graph?scenario='+sc);$('nodes').textContent=graphData.nodes.length;$('edges').textContent=graphData.edges.length;$('routes').textContent='—';fillOptions();render();$('status').textContent='Ambiente local conectado · '+sc;await Promise.all([analyze(),centrality()]);}
+ catch(e){$('status').textContent='Erro: '+e.message;}}
+async function analyze(){const sc=$('scenario').value,s=$('source').value,t=$('target').value;
+ try{const data=await api(`/api/paths?scenario=${sc}&source=${encodeURIComponent(s)}&target=${encodeURIComponent(t)}`);$('routes').textContent=data.paths.length;
+  highlightNodes=new Set(data.paths[0]||[]);highlightEdges=new Set();if(data.paths[0])for(let i=0;i<data.paths[0].length-1;i++)highlightEdges.add(`${data.paths[0][i]}:${data.paths[0][i+1]}`);
+  $('path-result').textContent=data.paths.length?data.paths.slice(0,15).map((p,i)=>`${i+1}. ${p.join(' → ')}`).join('\n'):'Nenhum caminho modelado encontrado.';render();}
+ catch(e){$('path-result').textContent='Falha na consulta: '+e.message;}}
+async function centrality(){try{let result=await api('/api/centrality?scenario='+$('scenario').value);$('centrality').replaceChildren();result.centrality.slice(0,15).forEach(n=>{let row=document.createElement('div');let name=document.createElement('span');name.textContent=n.id;let score=document.createElement('strong');score.textContent=Number(n.score).toFixed(1);row.append(name,score);$('centrality').append(row);});}catch(e){$('centrality').textContent='Indisponível: '+e.message;}}
+$('scenario').onchange=load;$('search').onclick=analyze;
+$('ask').onclick=async()=>{const q=$('question').value;if(q.trim().length<5){$('answer').textContent='Digite uma pergunta com pelo menos 5 caracteres.';return;}
+ $('ask').disabled=true;$('answer').textContent='Consultando evidências e Qwen local…';try{const data=await api('/api/graphrag/ask',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({scenario:$('scenario').value,question:q})});$('answer').textContent=data.answer+'\n\nFontes: '+data.sources.map(s=>s.id+` (${s.score})`).join(', ');}catch(e){$('answer').textContent='Erro: '+e.message;}finally{$('ask').disabled=false;}};
+load();
+</script></body></html>

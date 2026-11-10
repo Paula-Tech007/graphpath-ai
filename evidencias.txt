@@ -1,0 +1,17 @@
+CAMINHOS:
+caminho
+["GP-EXT", "GP-WEB", "GP-APP", "GP-DB"]
+["GP-EXT", "GP-WEB", "GP-JUMP", "GP-DB"]
+
+CENTRALIDADE GDS:
+ativo, centralidade
+"GP-WEB", 3.0
+"GP-APP", 1.0
+"GP-JUMP", 1.0
+"GP-DB", 0.0
+"GP-EXT", 0.0
+"GP-RH", 0.0
+
+IMPACTO:
+caminhos_atuais, caminhos_sem_gp_web
+2, 0

@@ -1,0 +1,24 @@
+# Credenciais e configuracoes locais
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Editores e sistema
+.vscode/
+.idea/
+.DS_Store
+
+# Arquivos temporarios e logs
+*.log
+*.tmp
+
+# Prompts e relatorios gerados localmente
+prompt_ia*.txt
+relatorio_ia*.md
